@@ -2,14 +2,14 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import UserService from "./UserService";
+
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [city, setcity] = useState("");
+  const [city, setCity] = useState(""); // Corrected state variable name
   const navigate = useNavigate();
 
   const handleAdminCheck = (e) => {
@@ -40,31 +40,22 @@ function Signup() {
     }
 
     try {
-
+      const formData = { name, email, password, role, city }; // Define formData
       const token = localStorage.getItem('token');
-      await UserService.register(formData, token);
-
-    axios
-      .post("http://localhost:8081/registration", {
-        name,
-        email,
-        password,
-        role,
-        city
-      })
-      .then(() => {
-        alert("Registered Successfully");
-        navigate("/login");
-      })}
-
-
-      .catch((err) => {
-        if (err.response && err.response.data && err.response.data.error) {
-          alert(err.response.data.error); // Display the server error message
-        } else {
-          console.log(err);
+      await axios.post("http://localhost:8081/auth/register", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      }); 
+      });
+      alert("Registered Successfully");
+      navigate("/login");
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        alert(err.response.data.error); // Display the server error message
+      } else {
+        console.log(err);
+      }
+    }
   };
 
   return (
@@ -113,16 +104,16 @@ function Signup() {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="password">
-                <strong>Password</strong>
+              <label htmlFor="city">
+                <strong>City</strong>
               </label>
               <input
-                type="city"
-                placeholder="Enter city"
+                type="text"
+                placeholder="Enter City"
                 autoComplete="off"
                 name="city"
                 className="form-control rounded-0"
-                onChange={(e) => setcity(e.target.value)}
+                onChange={(e) => setCity(e.target.value)}
               />
             </div>
             <div className="mb-3 form-check">
