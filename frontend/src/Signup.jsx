@@ -2,12 +2,14 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import UserService from "./UserService";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [city, setcity] = useState("");
   const navigate = useNavigate();
 
   const handleAdminCheck = (e) => {
@@ -30,31 +32,39 @@ function Signup() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
       alert("Please fill in all fields");
       return;
     }
 
+    try {
+
+      const token = localStorage.getItem('token');
+      await UserService.register(formData, token);
+
     axios
-      .post("http://localhost:3001/auth/register", {
+      .post("http://localhost:8081/registration", {
         name,
         email,
         password,
         role,
+        city
       })
       .then(() => {
         alert("Registered Successfully");
         navigate("/login");
-      })
+      })}
+
+
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.error) {
           alert(err.response.data.error); // Display the server error message
         } else {
           console.log(err);
         }
-      });
+      }); 
   };
 
   return (
@@ -100,6 +110,19 @@ function Signup() {
                 name="password"
                 className="form-control rounded-0"
                 onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password">
+                <strong>Password</strong>
+              </label>
+              <input
+                type="city"
+                placeholder="Enter city"
+                autoComplete="off"
+                name="city"
+                className="form-control rounded-0"
+                onChange={(e) => setcity(e.target.value)}
               />
             </div>
             <div className="mb-3 form-check">
