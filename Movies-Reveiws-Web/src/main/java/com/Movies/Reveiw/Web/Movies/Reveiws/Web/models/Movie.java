@@ -1,4 +1,4 @@
-/*
+
 package com.Movies.Reveiw.Web.Movies.Reveiws.Web.models;
 
 import jakarta.persistence.*;
@@ -25,7 +25,9 @@ public class Movie {
     @Column(nullable = false)
     private int year;
 
+    private String image;
+
 
 
 }
-*/
+

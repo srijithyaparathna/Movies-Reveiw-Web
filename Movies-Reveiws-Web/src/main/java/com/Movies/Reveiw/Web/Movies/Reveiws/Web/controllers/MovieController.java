@@ -1,62 +1,57 @@
-/*
 package com.Movies.Reveiw.Web.Movies.Reveiws.Web.controllers;
 
-
-
+import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
+import com.Movies.Reveiw.Web.Movies.Reveiws.Web.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
-
+@CrossOrigin
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("/api")
 public class MovieController {
 
-
-    private final MovieService movieService;
+    private final MovieService service;
 
     @Autowired
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
+    public MovieController(MovieService service) {
+        this.service = service;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Movie>> getAllMovies() {
-        List<Movie> movies = movieService.getAllMovies();
-        return new ResponseEntity<>(movies, HttpStatus.OK);
+    @GetMapping("/movies")
+    public List<Movie> getAllMovies() {
+        return service.getAllMovies();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
-        Optional<Movie> movie = movieService.getMovieById(id);
-        return movie.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/movie/{id}")
+    public ResponseEntity<Movie> getOneMovie(@PathVariable int id) {
+        return service.getOneMovie(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Movie> addMovie(@RequestBody Movie movie) {
-        Movie addedMovie = movieService.saveMovie(movie);
-        return new ResponseEntity<>(addedMovie, HttpStatus.CREATED);
+    @PostMapping("/movie")
+    public ResponseEntity<String> createMovie(@RequestBody Movie movie) {
+
+        return service.createMovie(movie);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
-        if (!movieService.getMovieById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        movie.setId(id);
-        Movie updatedMovie = movieService.saveMovie(movie);
-        return ResponseEntity.ok(updatedMovie);
+    @DeleteMapping("/movie/{id}")
+    public ResponseEntity<String> deleteMovieById(@PathVariable int id) {
+        return service.deleteMovieById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
-        movieService.deleteMovieById(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/movie")
+    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie) {
+        return service.updateMovie(movie);
     }
 
+    // Image upload for movie posters
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        return service.uploadImage(file);
+    }
 }
-*/
