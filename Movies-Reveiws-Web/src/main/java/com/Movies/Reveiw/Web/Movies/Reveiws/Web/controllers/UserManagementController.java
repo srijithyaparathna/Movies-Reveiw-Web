@@ -22,6 +22,7 @@ public class UserManagementController {
         return ResponseEntity.ok(usersManagementService.register(reg));
     }
 
+
     @PostMapping("/auth/login")
     public ResponseEntity<ReqRes> login(@RequestBody ReqRes req){
         return ResponseEntity.ok(usersManagementService.login(req));
