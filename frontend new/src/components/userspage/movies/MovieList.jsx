@@ -5,7 +5,6 @@ import UserService from "../../service/UserService";
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
-  const [imageLinks, setImageLinks] = useState({});
   const [profileInfo, setProfileInfo] = useState({});
   const token = localStorage.getItem("token");
 
@@ -29,28 +28,12 @@ const MovieList = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMovies(response.data);
-      fetchImageLinks(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching movies:", error);
     }
   };
 
-  const fetchImageLinks = async (movies) => {
-    const links = {};
-    for (const movie of movies) {
-      if (movie.image) {
-        try {
-          const response = await axios.get(movie.image, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          links[movie.id] = response.data;
-        } catch (error) {
-          console.error(`Error fetching image for movie ${movie.id}:`, error);
-        }
-      }
-    }
-    setImageLinks(links);
-  };
 
   const deleteMovie = async (movieId) => {
     try {
@@ -95,13 +78,13 @@ const MovieList = () => {
               <td>{movie.director}</td>
               <td>{movie.year}</td>
               <td>
-                {imageLinks[movie.id] && (
+               
                   <img
-                    src={imageLinks[movie.id]}
+                    src={movie.image}
                     alt={movie.title}
                     style={{ maxWidth: "200px", height: "auto" }}
                   />
-                )}
+                
               </td>
               <td>
                 <button

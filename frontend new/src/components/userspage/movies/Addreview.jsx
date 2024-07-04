@@ -4,11 +4,11 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 const AddReview = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
+  
+    
     const { movieId } = useParams();
     console.log(movieId, 'search');
-    const movieId1 = searchParams.get('movieId');
+    
     const [username, setUsername] = useState('');
     const [content, setContent] = useState('');
     const [rating, setRating] = useState('');
@@ -54,25 +54,32 @@ const AddReview = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            // Validate input fields
             if (!username || !content || !rating) {
                 setError('Please fill out all fields and provide a rating.');
                 return;
             }
-
+    
+            // Verify token
             const token = verifyToken();
             if (!token) return;
-
+    
+            // Prepare review data
             const reviewData = { username, content, rating, movieId };
-            console.log('Review data:', reviewData);
-
+    
             // Add new review
-            await axios.post(`http://localhost:8081/api/reviews`, reviewData, {
+            const response = await axios.post(`http://localhost:8081/api/reviews`, reviewData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
-            navigate(`/movies/${movieId}`);
+    
+            // Check response and navigate on success
+            if (response.status === 201) {
+                navigate(`/movies/${movieId}`);
+            } else {
+                setError('Failed to add review. Please try again later.');
+            }
         } catch (error) {
-            console.log('Error adding review:', error);
+            console.error('Error adding review:', error);
             if (error.response) {
                 setError(error.response.data.message);
             } else if (error.request) {
@@ -82,6 +89,7 @@ const AddReview = () => {
             }
         }
     };
+    
 
     return (
         <div className="add-review-container">
