@@ -17,7 +17,7 @@ const UpdateMovie = () => {
   useEffect(() => {
     fetchMovieDataById(movieId);
   }, [movieId]);
-
+  console.log('movieId:', movieId);
   const fetchMovieDataById = async (movieId) => {
     try {
       const token = localStorage.getItem('token');

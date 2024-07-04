@@ -30,13 +30,13 @@ function UpdateUser() {
   };
 
 
-  const handleInputChange = (e) => {
+  function handleInputChange(e) {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
       ...prevUserData,
       [name]: value
     }));
-  };
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -7,9 +7,10 @@ import FooterComponent from './components/common/Footer';
 import UpdateUser from './components/userspage/UpdateUser';
 import UserManagementPage from './components/userspage/UserManagementPage';
 import ProfilePage from './components/userspage/ProfilePage';
-import MovieList from './components/userspage/movies/MovieList.jsx';
-import AddMovie from './components/userspage/movies/AddMovie.jsx';
-import UpdateMovie from './components/userspage/movies/UpdateMovie.jsx';
+import MovieList from './components/userspage/movies/MovieList';
+import AddMovie from './components/userspage/movies/AddMovie';
+import UpdateMovie from './components/userspage/movies/UpdateMovie';
+import AddReview from './components/userspage/movies/Addreview.jsx';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                         <Route path="/movies" element={<MovieList />} />
                         <Route path="/add-movie" element={<AddMovie />} />
                         <Route path="/update-movie/:movieId" element={<UpdateMovie />} />
+                        <Route path="/add-review/:movieId" element={<AddReview />} />
                         <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
                 </div>
