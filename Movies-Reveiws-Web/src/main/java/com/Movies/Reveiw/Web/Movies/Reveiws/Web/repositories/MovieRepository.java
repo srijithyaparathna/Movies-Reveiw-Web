@@ -1,23 +1,15 @@
-
 package com.Movies.Reveiw.Web.Movies.Reveiws.Web.repositories;
+
+import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
-import com.Movies.Reveiw.Web.Movies.Reveiws.Web.services.MovieService;
 
-import java.util.List;
-
-
+import java.util.Optional;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
-    // Custom query methods
+    Optional<Movie> findById(Integer id);
 
-    // Find movies by category
-
-
-    // Search movies by name containing a specific string
-
+    // You can add more custom query methods here if needed
 }

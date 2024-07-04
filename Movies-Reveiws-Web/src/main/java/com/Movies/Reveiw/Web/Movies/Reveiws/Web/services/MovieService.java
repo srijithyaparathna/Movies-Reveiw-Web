@@ -2,6 +2,7 @@ package com.Movies.Reveiw.Web.Movies.Reveiws.Web.services;
 
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.repositories.MovieRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +43,19 @@ public class MovieService {
         }
     }
 
-    public ResponseEntity<Movie> updateMovie(Movie movie) {
-        if (movieRepository.existsById(movie.getId())) {
-            Movie updatedMovie = movieRepository.save(movie);
-            return ResponseEntity.ok(updatedMovie);
+    public ResponseEntity<Movie> updateMovie(Integer id, Movie updatedMovie) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+        if (movieOptional.isPresent()) {
+            Movie existingMovie = movieOptional.get();
+            existingMovie.setTitle(updatedMovie.getTitle());
+            existingMovie.setDirector(updatedMovie.getDirector());
+            existingMovie.setYear(updatedMovie.getYear());
+            existingMovie.setImage(updatedMovie.getImage());
+            // Update other fields as needed
+
+            // Save the updated movie
+            Movie savedMovie = movieRepository.save(existingMovie);
+            return ResponseEntity.ok(savedMovie);
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -3,7 +3,6 @@ package com.Movies.Reveiw.Web.Movies.Reveiws.Web.controllers;
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +34,6 @@ public class MovieController {
 
     @PostMapping("/movie")
     public ResponseEntity<String> createMovie(@RequestBody Movie movie) {
-
         return service.createMovie(movie);
     }
 
@@ -44,9 +42,9 @@ public class MovieController {
         return service.deleteMovieById(id);
     }
 
-    @PutMapping("/movie")
-    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie) {
-        return service.updateMovie(movie);
+    @PutMapping("/movie/{movieId}")
+    public ResponseEntity<Movie> updateMovie(@PathVariable int movieId, @RequestBody Movie movie) {
+        return service.updateMovie(movieId, movie);
     }
 
     // Image upload for movie posters

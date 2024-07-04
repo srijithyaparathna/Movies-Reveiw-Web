@@ -1,40 +1,118 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import UserService from '../../service/UserService';
 
 const MovieList = () => {
-    const [movies, setMovies] = useState([]);
-    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+  const [movies, setMovies] = useState([]);
+  const [imageLinks, setImageLinks] = useState({});
+  const [profileInfo, setProfileInfo] = useState({});
+  const token = localStorage.getItem('token');
 
-    useEffect(() => {
-        fetchMovies();
-    }, []);
+  useEffect(() => {
+    fetchProfileInfo();
+    fetchMovies();
+  }, []);
 
-    const fetchMovies = async () => {
+  const fetchProfileInfo = async () => {
+    try {
+      const response = await UserService.getYourProfile(token);
+      setProfileInfo(response.ourUsers);
+    } catch (error) {
+      console.error('Error fetching profile information:', error);
+    }
+  };
+
+  const fetchMovies = async () => {
+    try {
+      const response = await axios.get('http://localhost:8081/api/movies', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMovies(response.data);
+      fetchImageLinks(response.data);
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+    }
+  };
+
+  const fetchImageLinks = async (movies) => {
+    const links = {};
+    for (const movie of movies) {
+      if (movie.image) {
         try {
-            const response = await axios.get('http://localhost:8081/api/movies', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setMovies(response.data);
+          const response = await axios.get(movie.image, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          links[movie.id] = response.data;
         } catch (error) {
-            console.error('Error fetching movies:', error);
+          console.error(`Error fetching image for movie ${movie.id}:`, error);
         }
-    };
+      }
+    }
+    setImageLinks(links);
+  };
 
-    return (
-        <div>
-            <h1>Movies List</h1>
-            <ul>
-                {movies.map(movie => (
-                    <li key={movie.id}>
-                        <h2>{movie.title}</h2>
-                        <p><strong>Director:</strong> {movie.director}</p>
-                        <p><strong>Year:</strong> {movie.year}</p>
-                        {movie.image && <img src={movie.image} alt={movie.title} style={{ maxWidth: '200px' }} />}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  const deleteMovie = async (movieId) => {
+    try {
+      const confirmDelete = window.confirm('Are you sure you want to delete this movie?');
+      if (confirmDelete) {
+        await axios.delete(`http://localhost:8081/api/movie/${movieId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        fetchMovies();
+      }
+    } catch (error) {
+      console.error(`Error deleting movie ${movieId}:`, error);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Movies List</h1>
+      <button className='reg-button'>
+        <Link to="/add-movie">Add Movie</Link>
+      </button>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Year</th>
+            <th>Image</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {movies.map(movie => (
+            <tr key={movie.id}>
+              <td>{movie.id}</td>
+              <td>{movie.title}</td>
+              <td>{movie.director}</td>
+              <td>{movie.year}</td>
+              <td>
+                {imageLinks[movie.id] && (
+                  <img 
+                    src={imageLinks[movie.id]} 
+                    alt={movie.title} 
+                    style={{ maxWidth: '200px', height: 'auto' }} 
+                  />
+                )}
+              </td>
+              <td>
+                <button className='delete-button' onClick={() => deleteMovie(movie.id)}>Delete</button>
+                {profileInfo.role === "ADMIN" && (
+                  <button>
+                    <Link to={`/update-movie/${movie.id}`}>Update</Link>
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default MovieList;
