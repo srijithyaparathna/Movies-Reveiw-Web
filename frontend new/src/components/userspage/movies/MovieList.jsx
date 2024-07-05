@@ -34,7 +34,6 @@ const MovieList = () => {
     }
   };
 
-
   const deleteMovie = async (movieId) => {
     try {
       const confirmDelete = window.confirm(
@@ -78,23 +77,21 @@ const MovieList = () => {
               <td>{movie.director}</td>
               <td>{movie.year}</td>
               <td>
-               
-                  <img
-                    src={movie.image}
-                    alt={movie.title}
-                    style={{ maxWidth: "200px", height: "auto" }}
-                  />
-                
+                <img
+                  src={movie.image}
+                  alt={movie.title}
+                  style={{ maxWidth: "200px", height: "auto" }}
+                />
               </td>
               <td>
-                <button
-                  className="delete-button"
-                  onClick={() => deleteMovie(movie.id)}
-                >
-                  Delete
-                </button>
                 {profileInfo.role === "ADMIN" && (
                   <>
+                    <button
+                      className="delete-button"
+                      onClick={() => deleteMovie(movie.id)}
+                    >
+                      Delete
+                    </button>
                     <button>
                       <Link to={`/update-movie/${movie.id}`}>Update</Link>
                     </button>
@@ -103,6 +100,11 @@ const MovieList = () => {
 
                 <button>
                   <Link to={`/add-review/${movie.id}`}>Add Review</Link>
+                </button>
+
+                {/* View Reviews Button */}
+                <button>
+                  <Link to={`/view-movie/${movie.id}`}>View Reviews</Link>
                 </button>
               </td>
             </tr>

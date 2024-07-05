@@ -12,6 +12,7 @@ import AddMovie from './components/userspage/movies/AddMovie';
 import UpdateMovie from './components/userspage/movies/UpdateMovie';
 import AddReview from './components/userspage/movies/Addreview'; // Corrected import
 import ViewAllReviews from './components/userspage/movies/viewallreviews'; // Corrected import
+import ViewMovieByID from './components/userspage/movies/ViewReviewByID.jsx'; // Import ViewMovieByID
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                         <Route path="/update-movie/:movieId" element={<UpdateMovie />} />
                         <Route path="/add-review/:movieId" element={<AddReview />} />
                         <Route path="/view-all-reviews" element={<ViewAllReviews />} />
+                        <Route path="/view-movie/:movieId" element={<ViewMovieByID />} /> {/* New Route */}
                         <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
                 </div>

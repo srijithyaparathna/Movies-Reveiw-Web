@@ -9,8 +9,7 @@ function RegistrationPage() {
         name: '',
         email: '',
         password: '',
-        role: '',
-        city: ''
+        role: 'USER', // Default role set to USER
     });
 
     const handleInputChange = (e) => {
@@ -21,8 +20,6 @@ function RegistrationPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Call the register method from UserService
-
             const token = localStorage.getItem('token');
             await UserService.register(formData, token);
 
@@ -31,8 +28,7 @@ function RegistrationPage() {
                 name: '',
                 email: '',
                 password: '',
-                role: '',
-                city: ''
+                role: 'USER', // Reset role to default after submission
             });
             alert('User registered successfully');
             navigate('/login');
@@ -63,10 +59,7 @@ function RegistrationPage() {
                     <label>Role:</label>
                     <input type="text" name="role" value={formData.role} onChange={handleInputChange} placeholder="Enter your role" required />
                 </div>
-                <div className="form-group">
-                    <label>City:</label>
-                    <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="Enter your city" required />
-                </div>
+                
                 <button type="submit">Register</button>
             </form>
         </div>

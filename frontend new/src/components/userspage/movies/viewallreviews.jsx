@@ -12,7 +12,26 @@ const ViewAllReviews = () => {
                 const response = await axios.get('http://localhost:8081/api/reviews', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setReviews(response.data);
+                const reviewsData = response.data;
+
+                // Fetch movie details for each review
+                const reviewsWithMovies = await Promise.all(
+                    reviewsData.map(async (review) => {
+                        const movieResponse = await axios.get(`http://localhost:8081/api/movie/${review.movie.id}`, {
+                            headers: { Authorization: `Bearer ${token}` }
+                        });
+                        const movieData = movieResponse.data;
+                        return {
+                            ...review,
+                            movie: {
+                                ...movieData,
+                                id: review.movie.id // Keep movie ID from original review
+                            }
+                        };
+                    })
+                );
+
+                setReviews(reviewsWithMovies);
                 setLoading(false); // Set loading to false after data is fetched
             } catch (error) {
                 console.error('Error fetching reviews:', error);
@@ -36,15 +55,36 @@ const ViewAllReviews = () => {
                     {loading ? (
                         <p>Loading reviews...</p> // Display loading message
                     ) : reviews.length > 0 ? (
-                        reviews.map(review => (
-                            <div key={review.id} className="review">
-                                <h3>{review.username}</h3>
-                                <p>{review.content}</p>
-                                <p>Rating: {review.rating}</p>
-                                <p>Reviewed on: {new Date(review.createdAt).toLocaleDateString()}</p>
-                                <p>Movie ID: {review.movie.id}</p> {/* Displaying movieId */}
-                            </div>
-                        ))
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Content</th>
+                                    <th>Rating</th>
+                                    <th>Reviewed On</th>
+                                    <th>Movie Title</th>
+                                    <th>Movie Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {reviews.map(review => (
+                                    <tr key={review.id}>
+                                        <td>{review.username}</td>
+                                        <td>{review.content}</td>
+                                        <td>{review.rating}</td>
+                                        <td>{new Date(review.createdAt).toLocaleDateString()}</td>
+                                        <td>{review.movie.title}</td>
+                                        <td>
+                                            <img
+                                                src={review.movie.image}
+                                                alt={review.movie.title}
+                                                style={{ maxWidth: "100px", height: "auto" }}
+                                            />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     ) : (
                         <p>No reviews available.</p>
                     )}
