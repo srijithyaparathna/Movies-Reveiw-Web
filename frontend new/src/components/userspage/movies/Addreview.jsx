@@ -68,13 +68,13 @@ const AddReview = () => {
             const reviewData = { username, content, rating, movieId };
     
             // Add new review
-            const response = await axios.post(`http://localhost:8081/api/reviews`, reviewData, {
+            const response = await axios.post(`http://localhost:8081/api/reviews/movie/${movieId}`, reviewData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
     
             // Check response and navigate on success
             if (response.status === 201) {
-                navigate(`/movies/${movieId}`);
+                navigate(`/movies`);
             } else {
                 setError('Failed to add review. Please try again later.');
             }

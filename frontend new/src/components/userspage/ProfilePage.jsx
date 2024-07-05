@@ -29,6 +29,7 @@ function ProfilePage() {
                 <div>
                     <button><Link to={`/update-user/${profileInfo.id}`}>Update This Profile</Link></button>
                     <button><Link to="/add-movie">Add Movie</Link></button> {/* Add Movie button */}
+                    <button><Link to="/view-all-reviews">View All Reviews</Link></button> {/* View All Reviews button */}
                 </div>
             )}
             <br />

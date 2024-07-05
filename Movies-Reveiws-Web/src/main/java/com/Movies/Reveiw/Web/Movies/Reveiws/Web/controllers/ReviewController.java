@@ -2,6 +2,7 @@ package com.Movies.Reveiw.Web.Movies.Reveiws.Web.controllers;
 
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Review;
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.services.ReviewService;
+import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class ReviewController {
     }
 
     @GetMapping("/movie/{movieId}")
-    public ResponseEntity<List<Review>> getReviewsByMovieId(@PathVariable Long movieId) {
+    public ResponseEntity<List<Review>> getReviewsByMovieId(@PathVariable int movieId) {
         List<Review> reviews = reviewService.getReviewsByMovieId(movieId);
         if (!reviews.isEmpty()) {
             return ResponseEntity.ok(reviews);
@@ -43,8 +44,13 @@ public class ReviewController {
 
 
 
-    @PostMapping
-    public ResponseEntity<Review> createReview(@RequestBody Review review) {
+    @PostMapping("/movie/{movieId}")
+    public ResponseEntity<Review> createReviewForMovie(@PathVariable int movieId, @RequestBody Review review) {
+        // Assuming Review class has a Movie field
+        Movie movie = new Movie();
+        movie.setId(movieId);
+        review.setMovie(movie);
+
         Review createdReview = reviewService.createReview(review);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReview);
     }

@@ -24,7 +24,8 @@ public class ReviewService {
         return review.orElse(null);
     }
 
-    public List<Review> getReviewsByMovieId(Long movieId) {
+    public List<Review> getReviewsByMovieId(int movieId) {
+
         return reviewRepository.findByMovieId(movieId);
     }
 
