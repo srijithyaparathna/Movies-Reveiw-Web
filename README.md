@@ -1,6 +1,7 @@
 # Movies-Reviews-Webapplication
 
 This repository contains the backend and frontend code for a Movies Reviews Webapplication developed with Spring Boot and React Vite.
+![image](https://github.com/srijithyaparathna/Movies-Reveiw-Web/assets/125755221/2a1901aa-7571-44ba-88f2-231fbf0b8140)
 
 ## Features
 
@@ -10,6 +11,11 @@ This repository contains the backend and frontend code for a Movies Reviews Weba
   - Implements user authentication and authorization with Spring Security.
 
 - **Frontend:**
+- ![image](https://github.com/srijithyaparathna/Movies-Reveiw-Web/assets/125755221/a1817c4f-7ca5-49a8-a219-7fe0488d6156)
+- ![image](https://github.com/srijithyaparathna/Movies-Reveiw-Web/assets/125755221/f6b7fe94-ffad-4890-a14c-c84489e90cf7)
+![image](https://github.com/srijithyaparathna/Movies-Reveiw-Web/assets/125755221/9d2b612f-82cd-4260-ab67-7f9813623aa2)
+
+
   - Built with React using Vite for fast development.
   - Allows users to view, review, and rate movies.
   - Provides an intuitive interface for interacting with the backend API.
