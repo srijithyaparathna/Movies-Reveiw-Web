@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UserService from '../service/UserService';
 import { Link } from 'react-router-dom';
+import { Container, Typography, Button, Box, Grid, Paper } from '@mui/material';
 
 function ProfilePage() {
     const [profileInfo, setProfileInfo] = useState({});
@@ -20,21 +21,38 @@ function ProfilePage() {
     };
 
     return (
-        <div className="profile-page-container">
-            <h2>Profile Information</h2>
-            <p>Name: {profileInfo.name}</p>
-            <p>Email: {profileInfo.email}</p>
-           
-            {profileInfo.role === "ADMIN" && (
-                <div>
-                    <button><Link to={`/update-user/${profileInfo.id}`}>Update This Profile</Link></button>
-                    <button><Link to="/add-movie">Add Movie</Link></button> {/* Add Movie button */}
-                    <button><Link to="/view-all-reviews">View All Reviews</Link></button> {/* View All Reviews button */}
-                </div>
-            )}
-            <br />
-            <button><Link to="/movies">Go to Movie List</Link></button> {/* Button to go to Movie List */}
-        </div>
+        <Container maxWidth="md" sx={{ mt: 5 }}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+                <Typography variant="h4" gutterBottom>
+                    Profile Information
+                </Typography>
+                <Typography variant="body1" paragraph>
+                    Name: {profileInfo.name}
+                </Typography>
+                <Typography variant="body1" paragraph>
+                    Email: {profileInfo.email}
+                </Typography>
+                
+                {profileInfo.role === "ADMIN" && (
+                    <Box sx={{ mt: 2 }}>
+                        <Button variant="contained" color="primary" component={Link} to={`/update-user/${profileInfo.id}`} sx={{ mr: 2 }}>
+                            Update This Profile
+                        </Button>
+                        <Button variant="contained" color="secondary" component={Link} to="/add-movie" sx={{ mr: 2 }}>
+                            Add Movie
+                        </Button>
+                        <Button variant="contained" component={Link} to="/view-all-reviews">
+                            View All Reviews
+                        </Button>
+                    </Box>
+                )}
+                <Box sx={{ mt: 4 }}>
+                    <Button variant="outlined" component={Link} to="/movies">
+                        Go to Movie List
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
     );
 }
 

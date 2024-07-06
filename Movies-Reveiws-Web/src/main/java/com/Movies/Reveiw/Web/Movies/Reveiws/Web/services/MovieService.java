@@ -2,7 +2,6 @@ package com.Movies.Reveiw.Web.Movies.Reveiws.Web.services;
 
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.repositories.MovieRepository;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,9 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private ReviewService reviewService;
+
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
@@ -36,8 +38,12 @@ public class MovieService {
 
     public ResponseEntity<String> deleteMovieById(int id) {
         if (movieRepository.existsById(id)) {
+            // First, delete the reviews associated with the movie
+            reviewService.deleteReviewsByMovieId(id);
+
+            // Then, delete the movie itself
             movieRepository.deleteById(id);
-            return ResponseEntity.ok("Movie deleted successfully.");
+            return ResponseEntity.ok("Movie and its reviews deleted successfully.");
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -1,13 +1,36 @@
-import React from 'react'
+// FooterComponent.jsx
+import React from 'react';
+import { Container, Typography, Box } from '@mui/material';
 
 const FooterComponent = () => {
     return (
-        <div>
-            <footer className='footer'>
-                <span>Movies-Reveiws-Web | All Right Reserved &copy; {new Date().getFullYear()} </span>
-            </footer>
-        </div>
-    )
-}
+        <Box
+            component="footer"
+            sx={{
+                py: 3,
+                px: 2,
+                mt: 'auto',
+                backgroundColor: (theme) =>
+                    theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+                textAlign: 'center'
+                
+            }}
+        >
+            <Container maxWidth="sm">
+                <Typography variant="body1">
+                    Your Footer Content Here.
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {'Copyright © '}
+                    <a color="inherit" href="https://mui.com/">
+                        Your Website
+                    </a>{' '}
+                    {new Date().getFullYear()}
+                    {'.'}
+                </Typography>
+            </Container>
+        </Box>
+    );
+};
 
-export default FooterComponent
+export default FooterComponent;

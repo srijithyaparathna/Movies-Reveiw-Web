@@ -1,6 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {
+    Container,
+    TextField,
+    Button,
+    Typography,
+    Box,
+    Grid,
+    Paper,
+    Alert
+} from '@mui/material';
 
 const AddMovie = () => {
     const navigate = useNavigate(); // Use for navigation
@@ -39,6 +49,7 @@ const AddMovie = () => {
                 console.log('Image uploaded:', response.data);
             } catch (error) {
                 console.log('Error uploading image:', error);
+                setError('Error uploading image');
             }
         }
     }, [image]);
@@ -84,46 +95,79 @@ const AddMovie = () => {
     };
 
     return (
-        <div className="add-movie-container">
-            <h2>Add Movie</h2>
-            <form onSubmit={handleSubmit}>
-                <label>Title:</label>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                />
-
-                <label>Director:</label>
-                <input
-                    type="text"
-                    value={director}
-                    onChange={(e) => setDirector(e.target.value)}
-                    required
-                />
-
-                <label>Year:</label>
-                <input
-                    type="number"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                    required
-                />
-
-                <label>Image:</label>
-                <input
-                    type="file"
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    required
-                />
-
-                {error && <div className="error-message">{error}</div>}
-
-                <button type="submit">Add Movie</button>
-            </form>
-        </div>
+        <Container maxWidth="sm" sx={{ mt: 5 }}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+                <Typography variant="h4" gutterBottom>
+                    Add Movie
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Title"
+                                variant="outlined"
+                                fullWidth
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Director"
+                                variant="outlined"
+                                fullWidth
+                                value={director}
+                                onChange={(e) => setDirector(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Year"
+                                type="number"
+                                variant="outlined"
+                                fullWidth
+                                value={year}
+                                onChange={(e) => setYear(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                component="label"
+                                fullWidth
+                            >
+                                Upload Image
+                                <input
+                                    type="file"
+                                    hidden
+                                    onChange={handleImageChange}
+                                    accept="image/*"
+                                    required
+                                />
+                            </Button>
+                        </Grid>
+                        {error && (
+                            <Grid item xs={12}>
+                                <Alert severity="error">{error}</Alert>
+                            </Grid>
+                        )}
+                        <Grid item xs={12}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                            >
+                                Add Movie
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Paper>
+        </Container>
     );
 };
 

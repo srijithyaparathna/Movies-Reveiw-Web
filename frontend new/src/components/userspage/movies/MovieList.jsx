@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import UserService from "../../service/UserService";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Box,
+  Grid,
+} from "@mui/material";
 
 const MovieList = () => {
   const [movies, setMovies] = useState([]);
@@ -51,67 +60,85 @@ const MovieList = () => {
   };
 
   return (
-    <div>
-      <h1>Movies List</h1>
+    <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Movies List
+      </Typography>
       {profileInfo.role === "ADMIN" && (
-        <button className="reg-button">
-          <Link to="/add-movie">Add Movie</Link>
-        </button>
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/add-movie"
+          sx={{ mb: 3 }}
+        >
+          Add Movie
+        </Button>
       )}
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Director</th>
-            <th>Year</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {movies.map((movie) => (
-            <tr key={movie.id}>
-              <td>{movie.id}</td>
-              <td>{movie.title}</td>
-              <td>{movie.director}</td>
-              <td>{movie.year}</td>
-              <td>
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  style={{ maxWidth: "200px", height: "auto" }}
-                />
-              </td>
-              <td>
-                {profileInfo.role === "ADMIN" && (
-                  <>
-                    <button
-                      className="delete-button"
-                      onClick={() => deleteMovie(movie.id)}
-                    >
-                      Delete
-                    </button>
-                    <button>
-                      <Link to={`/update-movie/${movie.id}`}>Update</Link>
-                    </button>
-                  </>
-                )}
-
-                <button>
-                  <Link to={`/add-review/${movie.id}`}>Add Review</Link>
-                </button>
-
-                {/* View Reviews Button */}
-                <button>
-                  <Link to={`/view-movie/${movie.id}`}>View Reviews</Link>
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <Grid container spacing={3}>
+        {movies.map((movie) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={movie.id}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="100%"
+                image={movie.image}
+                alt={movie.title}
+                sx={{ objectFit: "fit" }} // Ensures the image fits inside the card
+              />
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {movie.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Director: {movie.director}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Year: {movie.year}
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                  {profileInfo.role === "ADMIN" && (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => deleteMovie(movie.id)}
+                        sx={{ mr: 1, mb: 1 }} // Add margin bottom for small gap
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        variant="contained"
+                        component={Link}
+                        to={`/update-movie/${movie.id}`}
+                        sx={{ mb: 1, mr: 1}}
+                      >
+                        Update
+                      </Button>
+                    </>
+                  )}
+                  <Button
+                    variant="contained"
+                    component={Link}
+                    to={`/add-review/${movie.id}`}
+                    sx={{ mr: 1 }}
+                  >
+                    Add Review
+                  </Button>
+                  <Button
+                    variant="contained"
+                    component={Link}
+                    to={`/view-movie/${movie.id}`}
+                  >
+                    View Reviews
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 

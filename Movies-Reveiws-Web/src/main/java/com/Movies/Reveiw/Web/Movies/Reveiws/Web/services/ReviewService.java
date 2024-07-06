@@ -4,7 +4,6 @@ import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Review;
 import com.Movies.Reveiw.Web.Movies.Reveiws.Web.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.Movies.Reveiw.Web.Movies.Reveiws.Web.models.Movie;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +24,6 @@ public class ReviewService {
     }
 
     public List<Review> getReviewsByMovieId(int movieId) {
-
         return reviewRepository.findByMovieId(movieId);
     }
 
@@ -33,6 +31,8 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-
-
+    public void deleteReviewsByMovieId(int movieId) {
+        List<Review> reviews = reviewRepository.findByMovieId(movieId);
+        reviewRepository.deleteAll(reviews);
+    }
 }

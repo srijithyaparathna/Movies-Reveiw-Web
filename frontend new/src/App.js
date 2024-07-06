@@ -10,16 +10,31 @@ import ProfilePage from './components/userspage/ProfilePage';
 import MovieList from './components/userspage/movies/MovieList';
 import AddMovie from './components/userspage/movies/AddMovie';
 import UpdateMovie from './components/userspage/movies/UpdateMovie';
-import AddReview from './components/userspage/movies/Addreview'; // Corrected import
-import ViewAllReviews from './components/userspage/movies/viewallreviews'; // Corrected import
-import ViewMovieByID from './components/userspage/movies/ViewReviewByID.jsx'; // Import ViewMovieByID
+import AddReview from './components/userspage/movies/Addreview.jsx'; // Corrected import
+import ViewAllReviews from './components/userspage/movies/viewallreviews.jsx'; // Corrected import
+import ViewMovieByID from './components/userspage/movies/ViewReviewByID'; // Import ViewMovieByID
+
+import { Box, CssBaseline } from '@mui/material';
 
 function App() {
     return (
         <BrowserRouter>
-            <div className="App">
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh'
+                }}
+            >
+                <CssBaseline />
                 <Navbar />
-                <div className="content">
+                <Box
+                    component="main"
+                    sx={{
+                        flexGrow: 1,
+                        py: 3,
+                    }}
+                >
                     <Routes>
                         <Route exact path="/" element={<LoginPage />} />
                         <Route path="/login" element={<LoginPage />} />
@@ -35,9 +50,9 @@ function App() {
                         <Route path="/view-movie/:movieId" element={<ViewMovieByID />} /> {/* New Route */}
                         <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
-                </div>
+                </Box>
                 <FooterComponent />
-            </div>
+            </Box>
         </BrowserRouter>
     );
 }

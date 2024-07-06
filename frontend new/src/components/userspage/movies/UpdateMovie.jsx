@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Button, TextField, Typography, Container, Box } from '@mui/material';
 
 const UpdateMovie = () => {
   const navigate = useNavigate();
-  const { movieId } = useParams(); // Corrected: useParams() should match the route parameter name
+  const { movieId } = useParams();
   const [movieData, setMovieData] = useState({
     title: '',
     director: '',
@@ -17,7 +18,7 @@ const UpdateMovie = () => {
   useEffect(() => {
     fetchMovieDataById(movieId);
   }, [movieId]);
-  console.log('movieId:', movieId);
+
   const fetchMovieDataById = async (movieId) => {
     try {
       const token = localStorage.getItem('token');
@@ -109,51 +110,62 @@ const UpdateMovie = () => {
   };
 
   return (
-    <div className="update-movie-container">
-      <h2>Update Movie</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Title:</label>
-          <input
-            type="text"
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Update Movie
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Title"
             name="title"
             value={movieData.title}
             onChange={handleInputChange}
             required
+            variant="outlined"
+            sx={{ mb: 2 }}
           />
-        </div>
-        <div className="form-group">
-          <label>Director:</label>
-          <input
-            type="text"
+          <TextField
+            fullWidth
+            label="Director"
             name="director"
             value={movieData.director}
             onChange={handleInputChange}
             required
+            variant="outlined"
+            sx={{ mb: 2 }}
           />
-        </div>
-        <div className="form-group">
-          <label>Year:</label>
-          <input
-            type="number"
+          <TextField
+            fullWidth
+            label="Year"
             name="year"
+            type="number"
             value={movieData.year}
             onChange={handleInputChange}
             required
+            variant="outlined"
+            sx={{ mb: 2 }}
           />
-        </div>
-        <div className="form-group">
-          <label>Image:</label>
           <input
             type="file"
             onChange={handleImageChange}
             accept="image/*"
+            style={{ display: 'none' }}
+            id="image-input"
           />
-        </div>
-        {error && <div className="error-message">{error}</div>}
-        <button type="submit">Update Movie</button>
-      </form>
-    </div>
+          <label htmlFor="image-input">
+            <Button component="span" variant="contained" color="primary">
+              Upload Image
+            </Button>
+          </label>
+          {error && <Typography color="error">{error}</Typography>}
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+            Update Movie
+          </Button>
+        </form>
+      </Box>
+    </Container>
   );
 };
 

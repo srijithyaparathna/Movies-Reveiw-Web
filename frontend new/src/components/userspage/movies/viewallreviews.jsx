@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {
+    Container,
+    Card,
+    CardContent,
+    CardMedia,
+    Typography,
+    Grid,
+    CircularProgress,
+    Alert
+} from '@mui/material';
 
 const ViewAllReviews = () => {
     const [reviews, setReviews] = useState([]);
@@ -45,52 +55,48 @@ const ViewAllReviews = () => {
     }, [token]);
 
     return (
-        <div className="view-all-reviews">
-            <header className="App-header">
-                <h1>Movie Review App</h1>
-            </header>
-            <main>
-                <div className="reviews">
-                    <h2>Movie Reviews</h2>
-                    {loading ? (
-                        <p>Loading reviews...</p> // Display loading message
-                    ) : reviews.length > 0 ? (
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>Content</th>
-                                    <th>Rating</th>
-                                    <th>Reviewed On</th>
-                                    <th>Movie Title</th>
-                                    <th>Movie Image</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {reviews.map(review => (
-                                    <tr key={review.id}>
-                                        <td>{review.username}</td>
-                                        <td>{review.content}</td>
-                                        <td>{review.rating}</td>
-                                        <td>{new Date(review.createdAt).toLocaleDateString()}</td>
-                                        <td>{review.movie.title}</td>
-                                        <td>
-                                            <img
-                                                src={review.movie.image}
-                                                alt={review.movie.title}
-                                                style={{ maxWidth: "100px", height: "auto" }}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>No reviews available.</p>
-                    )}
-                </div>
-            </main>
-        </div>
+        <Container maxWidth="lg" sx={{ mt: 5 }}>
+            <Typography variant="h4" gutterBottom>
+                Movie Reviews
+            </Typography>
+            {loading ? (
+                <CircularProgress />
+            ) : reviews.length > 0 ? (
+                <Grid container spacing={3}>
+                    {reviews.map(review => (
+                        <Grid item xs={12} sm={6} md={4} key={review.id}>
+                            <Card>
+                                <CardMedia
+                                    component="img"
+                                    height="100%"
+                                    image={review.movie.image}
+                                    alt={review.movie.title}
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        {review.movie.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        <strong>Username:</strong> {review.username}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        <strong>Content:</strong> {review.content}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        <strong>Rating:</strong> {review.rating}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        <strong>Reviewed On:</strong> {new Date(review.createdAt).toLocaleDateString()}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : (
+                <Alert severity="info">No reviews available.</Alert>
+            )}
+        </Container>
     );
 };
 
